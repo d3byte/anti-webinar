@@ -1,0 +1,16 @@
+{
+  "name": "Anti-Webinar",
+  "version": "1.0",
+  "description": "Extension for webinar.ru website to hide user tracking.",
+  "manifest_version": 2,
+  "permissions": [
+    "tabs",
+    "webRequest",
+    "webRequestBlocking",
+    "https://events.webinar.ru/*"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  }
+}
