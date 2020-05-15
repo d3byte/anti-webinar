@@ -6,16 +6,16 @@ function init() {
 
     const chatObserver = new Observer();
 
-    chrome.tabs.query({ url: 'https://events.webinar.ru/*' }, tab => {
-        console.log(tab);
-        chrome.tabs.executeScript(
-            tab[0].id,
-            {
-                code: '',
-            },
-            result => chatObserver.observe(result)
-        )
-    });
+    // chrome.tabs.query({ url: 'https://events.webinar.ru/*' }, tab => {
+    //     console.log(tab);
+    //     chrome.tabs.executeScript(
+    //         tab[0].id,
+    //         {
+    //             code: '',
+    //         },
+    //         result => chatObserver.observe(result)
+    //     )
+    // });
 }
 
 function RequestInterceptor() {
@@ -31,8 +31,9 @@ function RequestInterceptor() {
     }
 
     function handleRequest(details) {
-        const cancelsIsFocusedProp = Object.keys(details.requestBody || {}).includes('isFocused') && !details.requestBody.isFocused;
-        const cancelsIsSoundOnProp = Object.keys(details.requestBody || {}).includes('isSoundOn') && !details.requestBody.isSoundOn;
+        const requestBody = ((details.requestBody || {}).formData || {});
+        const cancelsIsFocusedProp = Object.keys(requestBody).includes('isFocused') && requestBody.isFocused[0] === 'false';
+        const cancelsIsSoundOnProp = Object.keys(requestBody).includes('isSoundEnabled') && requestBody.isSoundEnabled[0] === 'false';
         return { cancel: details.requestBody && (cancelsIsFocusedProp || cancelsIsSoundOnProp) };
     }
 }
